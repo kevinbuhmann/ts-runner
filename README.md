@@ -13,3 +13,11 @@ Pass the path to your root TypeScript file along with `this` and `arguments` to 
 let tsRunner = require('ts-runner');
 tsRunner.run('./implementation/index.ts', this, arguments);
 ```
+
+## Versions
+
+### 0.1.1
+- minor linting fix (no functional changes)
+
+### 0.1.0
+- initial implementation
