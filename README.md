@@ -16,6 +16,9 @@ tsRunner.run('./implementation/index.ts', this, arguments);
 
 ## Versions
 
+### 0.1.2
+- readme update (no functional changes)
+
 ### 0.1.1
 - minor linting fix (no functional changes)
 
