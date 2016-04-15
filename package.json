@@ -1,6 +1,6 @@
 {
   "name": "ts-runner",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Executes TypeScript, including references, in node by transpiling to JavaScript on the fly.",
   "main": "index.js",
   "scripts": {
