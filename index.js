@@ -2,40 +2,27 @@
 'use strict';
 
 let fs = require('fs');
-let typescript = require('typescript');
+let tsc = require('typescript-compiler');
 
 module.exports = {
     run: run
 };
 
-function run(indexPath, _this, _arguments) {
-    let fileContentsCache = {};
-    let tsSources = getReferencesAndSelf(indexPath, fileContentsCache);
+function run(indexPath, _this, _arguments, options, tempFilename) {
+    options = options || '';
+    tempFilename = tempFilename || './__temp.js';
 
-    let tsCode = tsSources
-        .map(filePath => fileContentsCache[filePath])
-        .join('\n');
+    // compile and cleanup
+    let result = tsc.compile(indexPath, `-t ES6 --out ${tempFilename} ${options}`.trim());
+    fs.unlinkSync(tempFilename);
 
-    let jsCode = typescript.transpile(tsCode);
-    let jsWrapped = eval(`(function (exports, require, module, __filename, __dirname) {${jsCode}})`);
-    jsWrapped.apply(_this, _arguments);
-}
-
-function getReferencesAndSelf(filePath, fileContentsCache) {
-    let references = [filePath];
-
-    let folder = filePath.substring(0, filePath.lastIndexOf('/'));
-
-    let fileContents = fs.readFileSync(filePath).toString();
-    fileContentsCache[filePath] = fileContents;
-
-    let referenceMatch;
-    let referenceRegex = /\/\/\/ <reference path="([a-z-/]+(?:.d)?.ts)" \/>/g;
-    while (!!(referenceMatch = referenceRegex.exec(fileContents))) {
-        let reference = referenceMatch[1];
-        let childReferences = getReferencesAndSelf(`${folder}/${reference}`, fileContentsCache);
-        references = childReferences.concat(references);
+    // log errors
+    if (result.errors.length) {
+        result.errors.forEach(error => console.error(error));
     }
 
-    return references.filter((value, index, self) => self.indexOf(value) === index);
+    // execute code
+    let jsCode = result.sources[tempFilename];
+    let jsWrapped = eval(`(function (exports, require, module, __filename, __dirname) {${jsCode}})`);
+    jsWrapped.apply(_this, _arguments);
 }

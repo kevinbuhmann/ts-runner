@@ -1,6 +1,6 @@
 {
   "name": "ts-runner",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "description": "Executes TypeScript, including references, in node by transpiling to JavaScript on the fly.",
   "main": "index.js",
   "scripts": {
@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/kevinphelps/ts-runner#readme",
   "dependencies": {
-    "typescript": "^1.8.10"
+    "typescript-compiler": "^1.4.1-2"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
@@ -30,6 +30,7 @@
     "jscs-stylish": "^0.3.1",
     "jshint": "^2.9.1",
     "jshint-stylish": "^2.1.0",
-    "tslint": "^3.7.4"
+    "tslint": "^3.7.4",
+    "typescript": "^1.8.10"
   }
 }
