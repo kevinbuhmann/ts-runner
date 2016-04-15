@@ -15,7 +15,7 @@ function run(indexPath, _this, _arguments) {
     let tsCode = tsSources
         .map(filePath => fileContentsCache[filePath])
         .join('\n');
-    
+
     let jsCode = typescript.transpile(tsCode);
     let jsWrapped = eval(`(function (exports, require, module, __filename, __dirname) {${jsCode}})`);
     jsWrapped.apply(_this, _arguments);
