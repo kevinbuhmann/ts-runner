@@ -28,6 +28,9 @@ tsRunner.run('./implementation/index.ts', this, arguments, '--noImplicitAny');
 
 ## Versions
 
+### 0.3.1
+- attempt to find correct source path
+
 ### 0.3.0
 - use current version of TypeScript compile
 
