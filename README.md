@@ -8,10 +8,10 @@ Executes TypeScript, including references, in node by transpiling to JavaScript 
 
 ## API
 
-`tsRunner.run(indexPath, _this, _arguments, options, tempFilename)`:
+`tsRunner.run(sourcePath, _this, _arguments, options, tempFilename)`:
 Compiles TypesScript code and executes in the given node context (supplied by `_this` and `_arguments`). Any errors will be passed to `console.error`.
 
--  `indexPath` (string, required): The path of the TypeScript file to compile. Teferences will be followed.
+-  `sourcePath` (string, required): The path of the TypeScript file to compile. References will be followed.
 -  `_this` (object, required): Object to use as `thisArg` when executing the compiled JavaScript.
 -  `_arguments` (array, required): The node arguments (exports, require, module, __filename, __dirname) to use when executing the compiled JavaScript.
 -  `options` (string, optional): Options to pass to `tsc`, for example, '--noImplicitAny'. The default is an empty string.
@@ -27,6 +27,9 @@ tsRunner.run('./implementation/index.ts', this, arguments, '--noImplicitAny');
 ```
 
 ## Versions
+
+### 0.3.0
+- use current version of TypeScript compile
 
 ### 0.2.0
 - update to use `tsc` full compile

@@ -2,27 +2,30 @@
 'use strict';
 
 let fs = require('fs');
-let tsc = require('typescript-compiler');
+let childProcess = require('child_process');
+
+let path = require('path');
 
 module.exports = {
     run: run
 };
 
-function run(indexPath, _this, _arguments, options, tempFilename) {
+function run(sourcePath, _this, _arguments, options, tempFilename) {
     options = options || '';
     tempFilename = tempFilename || './__temp.js';
 
-    // compile and cleanup
-    let result = tsc.compile(indexPath, `-t ES6 --out ${tempFilename} ${options}`.trim());
-    fs.unlinkSync(tempFilename);
-
-    // log errors
-    if (result.errors.length) {
-        result.errors.forEach(error => console.error(error));
+    let tscPath = path.join('node_modules', '.bin', 'tsc');
+    try {
+        childProcess.execSync(`${tscPath} ${sourcePath} --out ${tempFilename} ${options}`);
+    } catch(e) {
+        let output = e.output.toString();
+        console.error(output.substring(1, output.length - 1));
+        throw new Error('tsc compile failed')
     }
 
-    // execute code
-    let jsCode = result.sources[tempFilename];
+    let jsCode = fs.readFileSync(tempFilename)
+    fs.unlinkSync(tempFilename);
+
     let jsWrapped = eval(`(function (exports, require, module, __filename, __dirname) {${jsCode}})`);
     jsWrapped.apply(_this, _arguments);
 }
